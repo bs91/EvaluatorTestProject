@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @eval.name %>
+</p>
+
+<p>
+  <b>Code:</b>
+  <%= @eval.code %>
+</p>
+
+<p>
+  <b>Result:</b>
+  <%= @result %>
+</p>
+
+
+<%= link_to 'Edit', edit_eval_path(@eval) %> |
+<%= link_to 'Back', evals_path %>

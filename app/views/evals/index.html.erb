@@ -1,0 +1,25 @@
+<h1>Listing evals</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Code</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @evals.each do |eval| %>
+  <tr>
+    <td><%= eval.name %></td>
+    <td><%= eval.code %></td>
+    <td><%= link_to 'Show', eval %></td>
+    <td><%= link_to 'Edit', edit_eval_path(eval) %></td>
+    <td><%= link_to 'Destroy', eval, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Eval', new_eval_path %>
