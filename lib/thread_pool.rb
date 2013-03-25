@@ -25,10 +25,10 @@ class ThreadPool
         # Control catch and we use the #shutdown method to throw the flag.
         # One bit of niftyness I suppose is that instead of instant bailing
         # we want to make sure all the processes finish up. You could just
-        # use Thrad.kill if you wished to say screw it to the processes.
+        # use Thread.kill if you wished to say screw it to the processes.
         catch(:exit) do
           loop do
-            process, args = @processes.pop # have a look at line 42. Should 
+            process, args = @processes.pop # have a look at line 44. Should 
                                            # explain what is happening here.
                                            # Making a Proc from the block,
                                            # and filling up args.

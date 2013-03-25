@@ -14,14 +14,15 @@ class EvalsController < ApplicationController
   # GET /evals/1.json
   def show
     @eval = Eval.find(params[:id])
-    tp = ThreadPool.new(10)
-    tp.assign do
+    Evaluator::Application::THREAD_POOL.assign(@eval.code) do
       begin
-        @result = "Current Thread:#{Thread.current[:id]}, Result: #{eval(@eval.code)}"
+        result = eval(@eval.code)
       rescue Exception => e
-        @result = "OH NO: #{e}"
+        result = "OH NO: #{e}"
       end
+      @result = "Current Thread:#{Thread.current[:id]}, Result: #{result}"
     end
+    at_exit {Evaluator::Application::THREAD_POOL.shutdown}
 
     respond_to do |format|
       format.html # show.html.erb
