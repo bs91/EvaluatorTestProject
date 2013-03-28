@@ -1,4 +1,5 @@
 class EvalsController < ApplicationController
+  require 'thread'
   respond_to :html, :js
 
  
@@ -17,15 +18,15 @@ class EvalsController < ApplicationController
   # GET /evals/1.json
   def show
     @eval = Eval.find(params[:id])
-    Evaluator::Application::THREAD_POOL.assign(@eval.code) {
+    Thread.new {
       begin
         result = eval(@eval.code)
       rescue Exception => e
         result = "OH NO: #{e}"
       ensure
-        @result = "Current Thread:#{Thread.current[:id]}, Result: #{result}"
+        @result = "Current Thread:#{Thread.current}, Result: #{result}"
       end
-    }
+    }.join(30)
     respond_with(@eval)
     #respond_to do |format|
     #  format.html # show.html.erb
