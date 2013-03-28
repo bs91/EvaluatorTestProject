@@ -1,17 +1,13 @@
 class EvalsController < ApplicationController
   require 'thread'
-  respond_to :html, :js
+  respond_to :html, :js, :json
 
  
   # GET /evals
   # GET /evals.json
   def index
     @evals = Eval.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @evals }
-    end
+    respond_with(@evals) 
   end
 
   # GET /evals/1
@@ -28,58 +24,38 @@ class EvalsController < ApplicationController
       end
     }.join(10)
     respond_with(@eval)
-    #respond_to do |format|
-    #  format.html # show.html.erb
-    #  format.js { render :layout => false }
-    #  format.json { render json: @eval }
-    #end
   end
 
   # GET /evals/new
   # GET /evals/new.json
   def new
     @eval = Eval.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @eval }
-    end
+    respond_with(@eval)
   end
 
   # GET /evals/1/edit
   def edit
     @eval = Eval.find(params[:id])
+    respond_with(@eval)
   end
 
   # POST /evals
   # POST /evals.json
   def create
     @eval = Eval.new(params[:eval])
-
-    respond_to do |format|
-      if @eval.save
-        format.html { redirect_to @eval, notice: 'Eval was successfully created.' }
-        format.json { render json: @eval, status: :created, location: @eval }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @eval.errors, status: :unprocessable_entity }
-      end
-    end
+    @eval.save and flash[:notice] = "Yay! New Eval Created!"
+    respond_with(@eval)
   end
 
   # PUT /evals/1
   # PUT /evals/1.json
   def update
     @eval = Eval.find(params[:id])
-
-    respond_to do |format|
-      if @eval.update_attributes(params[:eval])
-        format.html { redirect_to @eval, notice: 'Eval was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @eval.errors, status: :unprocessable_entity }
-      end
+    if @eval.update_attributes(params[:eval])
+      flash[:notice] = "Eval was successfully updated."
+      respond_with(@eval)
+    else
+      respond_with(@eval.errors)
     end
   end
 
@@ -88,10 +64,6 @@ class EvalsController < ApplicationController
   def destroy
     @eval = Eval.find(params[:id])
     @eval.destroy
-
-    respond_to do |format|
-      format.html { redirect_to evals_url }
-      format.json { head :no_content }
-    end
+    redirect_to(evals_url)
   end
 end
