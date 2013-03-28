@@ -26,7 +26,7 @@ class EvalsController < ApplicationController
       ensure
         @result = "Current Thread:#{Thread.current}, Result: #{result}"
       end
-    }.join(30)
+    }.join(10)
     respond_with(@eval)
     #respond_to do |format|
     #  format.html # show.html.erb
