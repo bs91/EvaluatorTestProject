@@ -1,4 +1,7 @@
-class EvalsController < ApplicationController 
+class EvalsController < ApplicationController
+  respond_to :html, :js
+
+ 
   # GET /evals
   # GET /evals.json
   def index
@@ -14,20 +17,21 @@ class EvalsController < ApplicationController
   # GET /evals/1.json
   def show
     @eval = Eval.find(params[:id])
-    Evaluator::Application::THREAD_POOL.assign(@eval.code) do
+    Evaluator::Application::THREAD_POOL.assign(@eval.code) {
       begin
         result = eval(@eval.code)
       rescue Exception => e
         result = "OH NO: #{e}"
+      ensure
+        @result = "Current Thread:#{Thread.current[:id]}, Result: #{result}"
       end
-      @result = "Current Thread:#{Thread.current[:id]}, Result: #{result}"
-    end
-    at_exit {Evaluator::Application::THREAD_POOL.shutdown}
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @eval }
-    end
+    }
+    respond_with(@eval)
+    #respond_to do |format|
+    #  format.html # show.html.erb
+    #  format.js { render :layout => false }
+    #  format.json { render json: @eval }
+    #end
   end
 
   # GET /evals/new

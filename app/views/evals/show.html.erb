@@ -12,7 +12,8 @@
 
 <p>
   <b>Result:</b>
-  <%= @result %>
+  <p id='result'></p>
+  <%= link_to "Show Result", { :controller => "evals", :action => "show" }, :remote => true %>
 </p>
 
 

@@ -8,6 +8,6 @@ Evaluator::Application.initialize!
 module Evaluator
   class Application < Rails::Application
     require 'thread_pool'
-    THREAD_POOL = ThreadPool.new(10)
+    THREAD_POOL = ThreadPool.new
   end
 end
